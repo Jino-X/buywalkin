@@ -105,7 +105,6 @@ model Booking {
   service  Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   customer User    @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
-  @@unique([serviceId, startTime])
   @@index([serviceId, startTime])
   @@index([customerId, startTime])
   @@index([status])
