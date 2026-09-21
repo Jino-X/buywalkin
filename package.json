@@ -1,0 +1,37 @@
+{
+  "name": "marketplace-booking",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marketplace booking platform with NestJS and Next.js",
+  "scripts": {
+    "dev:api": "pnpm --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev": "pnpm --parallel --filter api --filter web dev",
+    "build:api": "pnpm --filter api build",
+    "build:web": "pnpm --filter web build",
+    "build": "pnpm --filter api build && pnpm --filter web build",
+    "test": "pnpm --filter api test",
+    "test:e2e": "pnpm --filter api test:e2e",
+    "lint": "pnpm --recursive lint",
+    "prisma:migrate": "pnpm --filter api prisma:migrate",
+    "prisma:generate": "pnpm --filter api prisma:generate",
+    "prisma:seed": "pnpm --filter api prisma:seed",
+    "prisma:studio": "pnpm --filter api prisma:studio",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
+  },
+  "keywords": [
+    "marketplace",
+    "booking",
+    "nestjs",
+    "nextjs",
+    "prisma"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
