@@ -145,56 +145,25 @@ async function main() {
   const lastWeekEnd = new Date(lastWeek);
   lastWeekEnd.setHours(11, 0, 0, 0);
 
-  await prisma.booking.upsert({
-    where: {
-      serviceId_startTime: {
-        serviceId: createdServices[0].id,
-        startTime: tomorrow,
-      },
-    },
-    update: {},
-    create: {
-      serviceId: createdServices[0].id,
-      customerId: customer.id,
-      startTime: tomorrow,
-      endTime: tomorrowEnd,
-      status: BookingStatus.CONFIRMED,
-    },
-  });
+  const seedBooking = async (
+    serviceId: string,
+    startTime: Date,
+    endTime: Date,
+    status: BookingStatus,
+  ) => {
+    const existing = await prisma.booking.findFirst({
+      where: { serviceId, startTime, status },
+    });
+    if (!existing) {
+      await prisma.booking.create({
+        data: { serviceId, customerId: customer.id, startTime, endTime, status },
+      });
+    }
+  };
 
-  await prisma.booking.upsert({
-    where: {
-      serviceId_startTime: {
-        serviceId: createdServices[1].id,
-        startTime: nextWeek,
-      },
-    },
-    update: {},
-    create: {
-      serviceId: createdServices[1].id,
-      customerId: customer.id,
-      startTime: nextWeek,
-      endTime: nextWeekEnd,
-      status: BookingStatus.CONFIRMED,
-    },
-  });
-
-  await prisma.booking.upsert({
-    where: {
-      serviceId_startTime: {
-        serviceId: createdServices[2].id,
-        startTime: lastWeek,
-      },
-    },
-    update: {},
-    create: {
-      serviceId: createdServices[2].id,
-      customerId: customer.id,
-      startTime: lastWeek,
-      endTime: lastWeekEnd,
-      status: BookingStatus.CANCELLED,
-    },
-  });
+  await seedBooking(createdServices[0].id, tomorrow, tomorrowEnd, BookingStatus.CONFIRMED);
+  await seedBooking(createdServices[1].id, nextWeek, nextWeekEnd, BookingStatus.CONFIRMED);
+  await seedBooking(createdServices[2].id, lastWeek, lastWeekEnd, BookingStatus.CANCELLED);
 
   console.log('Created sample bookings');
   console.log('Seed completed successfully!');
